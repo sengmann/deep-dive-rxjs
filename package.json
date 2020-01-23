@@ -1,0 +1,22 @@
+{
+  "name": "rxdeep",
+  "version": "1.0.0",
+  "description": "A practical deep dive into RxJS",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "RxJS"
+  ],
+  "author": "Sascha Engmann",
+  "license": "ISC",
+  "devDependencies": {
+    "tslint": "6.0.0",
+    "typescript": "^3.7.5"
+  },
+  "dependencies": {
+    "@w11k/rx-ninja": "^4.0.2",
+    "rxjs": "^6.5.4"
+  }
+}
