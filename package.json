@@ -12,6 +12,7 @@
   "author": "Sascha Engmann",
   "license": "ISC",
   "devDependencies": {
+    "@types/node": "^13.5.0",
     "tslint": "6.0.0",
     "typescript": "^3.7.5"
   },
