@@ -41,7 +41,7 @@
 // Q: What do you need it for?
 // A: RxJS is a library for composing asynchronous and event-based programs by using observable sequences.
 
-// Q: what are the most important properties of observables?
+// Q: What are the most important properties of observables?
 // A: Observables are lazy and can deliver more than one value over time
 
 
@@ -54,9 +54,9 @@
 
 
 // Hello from the observable world...
-import { empty, EMPTY, from, fromEvent, interval, of, timer } from "rxjs";
-import { take } from 'rxjs/operators';
-import { fromPromise } from 'rxjs/internal-compatibility';
+import { empty, from, fromEvent, interval, of, range, Subject, timer } from "rxjs";
+import { take } from "rxjs/operators";
+import { fromPromise } from "rxjs/internal-compatibility";
 
 const EventEmitter = require("events").EventEmitter;
 const clickEventEmitter = new EventEmitter();
@@ -82,14 +82,26 @@ fromEvent(clickEventEmitter, "buttonClick")
     .subscribe(_ => console.log(_));
 clickEventEmitter.emit("buttonClick", { type: "MouseEvent", x: 100, y: 100 });
 
-interval(1000)
+// RxViz https://rxviz.com/
+interval(200)
     .pipe(take(5))
     .subscribe(_ => console.log(_));
 
 
+range(1, 5)
+    .subscribe(_ => console.log(_));
+
+
+const subject = new Subject();
+subject.subscribe(_ => console.log(_));
+subject.next(1);
+subject.next(2);
+subject.complete();
+
+
 // And what about Promises?
 
-fromPromise(Promise.resolve('abc')).subscribe(_ => console.log(_));
+fromPromise(Promise.resolve("abc")).subscribe(_ => console.log(_));
 of(1).toPromise().then(_ => console.log(_));
 
 
@@ -103,6 +115,7 @@ of(1).toPromise().then(_ => console.log(_));
  * empty() => '|'
  * of(1) => '1|'
  * timer(10, 3) => '-0-1-2|'
+ * throwError(e) => '#'
  */
 
 
