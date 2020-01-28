@@ -6,7 +6,6 @@
  */
 
 
-// Operators are used as pipe since version 6
 
 
 
@@ -33,19 +32,19 @@ import { combineLatestToMap } from "@w11k/rx-ninja";
 
 of("1", "2", "3")
     .pipe(
-        map(_ => parseInt(_, 10)),
-    ).subscribe(_ => console.log(_));
+        map(value => parseInt(value, 10)),
+    ).subscribe(mappedValue => console.log(mappedValue));
 
 of(1, 2, 3, 4, 5)
     .pipe(
         filter(n => n % 2 !== 0),
-    ).subscribe(_ => console.log(_));
+    ).subscribe(oddNumber => console.log(oddNumber));
 
 of("1", "2", "3")
     .pipe(
-        map(_ => parseInt(_, 10)),
+        map(value => parseInt(value, 10)),
         filter(n => n % 2 !== 0),
-    ).subscribe(_ => console.log(_));
+    ).subscribe(oddNumber => console.log(oddNumber));
 
 // RxViz https://rxviz.com/examples/custom
 /*
@@ -62,22 +61,26 @@ interval(500)
 of(1, 2, 3, 4)
     .pipe(
         pairwise(),
-    ).subscribe(_ => console.log(_));
+    ).subscribe(pair => console.log(pair));
 
 // Only when value really changes
 of(1, 2, 2, 3, 4)
     .pipe(
         startWith(undefined),
         pairwise(),
-        filter(([prev, curr]) => prev === undefined || prev !== curr),
-        map(([_, curr]) => curr)
-    ).subscribe(_ => console.log(_));
+        filter(([n1, n2]) => n1 === undefined || n1 !== n2),
+        map(([, n2]) => n2)
+    ).subscribe(n => console.log(n));
+
+
+
+
 
 // Or like this...
 of(1, 2, 2, 3, 4)
     .pipe(
         distinctUntilChanged()
-    ).subscribe(_ => console.log(_));
+    ).subscribe(n => console.log(n));
 
 
 
@@ -86,22 +89,22 @@ of(1, 2, 2, 3, 4)
 of(1, 2, 3, 4)
     .pipe(
         take(2)
-    ).subscribe(_ => console.log(_));
+    ).subscribe(n => console.log(n));
 
 of(1, 2, 3)
     .pipe(
         first()
-    ).subscribe(_ => console.log(_));
+    ).subscribe(n => console.log(n));
 
 empty().pipe(
     take(1), // okay
     //first(), // will throw error
-).subscribe(_ => console.log(_));
+).subscribe(never => console.log(never));
 
 
 of(1, 2, 3, 4, 5).pipe(
     reduce((acc, val) => acc + val)
-).subscribe(_ => console.log(_));
+).subscribe(sum => console.log(sum));
 
 
 of(1, 2, 3, -1)
@@ -112,14 +115,14 @@ of(1, 2, 3, -1)
             }
         }),
     ).subscribe(
-    _ => console.log(`got positive number ${_}`),
+    n => console.log(`got positive number ${n}`),
     error => console.log(`oh no ${error}`),
     () => console.log(`completed`) // not executed when error is thrown
 );
 
 throwError("bad things happen")
     .pipe(
-        catchError(_ => of(1)) // recover
+        catchError(error => of(1)) // recover
     ).subscribe(_ => console.log(_));
 
 
@@ -132,8 +135,10 @@ throwError("bad things happen")
 
 
 // combining
-concat(of(1, 2, 3), of(4, 5, 6))
-    .subscribe(_ => console.log(_));
+concat(
+    of(1, 2, 3),
+    of(4, 5, 6)
+).subscribe(n => console.log(n));
 
 
 
@@ -144,11 +149,20 @@ concat(of(1, 2, 3), of(4, 5, 6))
 const a = interval(1000).pipe(take(3));
 const b = interval(2000).pipe(take(2));
 
+
+
+
+
+
 zip(a, b)
-    .subscribe(_ => console.log(_));
+    .subscribe(ziped => console.log(ziped));
+
+
+
+
 
 combineLatest([a, b])
-    .subscribe(_ => console.log(_));
+    .subscribe(combined => console.log(combined));
 
 
 
@@ -169,8 +183,8 @@ const { mergeMap, map, switchMap, delay } = RxOperators;
 
 // faking network request for save
 const save = (x) => {
-  return of(x).pipe(delay(500))
-  //return interval(500).pipe(map(() => x));
+  return of(x).pipe(delay(1500))
+  //return interval(1500).pipe(map(() => x));
 };
 
 const click$ = fromEvent(document, 'click');
@@ -196,38 +210,49 @@ function isNotNull<T>(t: T | null): t is T {
 }
 
 
-const lengthOfStrings = canContainNull.pipe(
-    filter(isNotNull), // works but not exactly easy to use
+canContainNull.pipe(
+    filter(isNotNull),
     map(x => x.length)
-);
+).subscribe(_ => console.log(_));
 
-lengthOfStrings.subscribe(_ => console.log(_));
+
+
+
+
+
 
 function skipNull<T>() {
     return (input: Observable<T | null>) => input.pipe(filter(isNotNull));
 }
 
-canContainNull.pipe(skipNull()).subscribe(_ => console.log(_));
-
-
-
-
-
-const foo$ = of(1, 2, 3, 4);
-const bar$ = of("5", "3", "4");
-
-// What happens when we switch foo$ and bar$?
-combineLatest([foo$, bar$])
+canContainNull
     .pipe(
-        map(([f, b]) => f + parseInt(b, 10)),
+        skipNull()
+    ).subscribe(_ => console.log(_));
+
+
+
+
+
+const oddNumbers = of(1, 3, 5);
+const evenNumbers = of(2, 4, 6);
+const randomNumber = of(6, 4, 2);
+
+//TODO Number example prüfen
+
+
+// What happens when we switch oddNumbers and evenNumbers?
+combineLatest([oddNumbers, evenNumbers, randomNumber])
+    .pipe(
+        map(([o, e, r]) => o - e + (r * 10)),
     ).subscribe(_ => console.log(_));
 
 
 
 // Looks very similar, but we can access the values using the property name instead of the position in the array
-combineLatestToMap({ f: foo$, b: bar$ })
+combineLatestToMap({ o: oddNumbers, r: randomNumber, e: evenNumbers})
     .pipe(
-        map(({ f, b }) => f + parseInt(b, 10)),
+        map(({e, o, r}) => o - e + (r * 10)),
     ).subscribe(_ => console.log(_));
 
 

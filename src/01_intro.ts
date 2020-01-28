@@ -68,7 +68,7 @@ of(1, 2, 3).subscribe(n => console.log(n));
 
 // Creating Observables
 
-from([1, 2, 3]).subscribe(_ => console.log(_));
+from([1, 2, 3]).subscribe(counter => console.log(counter));
 
 timer(100).subscribe(_ => console.log(_));
 
@@ -79,21 +79,21 @@ empty();
 
 fromEvent(clickEventEmitter, "buttonClick")
     .pipe(take(1))
-    .subscribe(_ => console.log(_));
+    .subscribe(mouseEvent => console.log(mouseEvent));
 clickEventEmitter.emit("buttonClick", { type: "MouseEvent", x: 100, y: 100 });
 
 // RxViz https://rxviz.com/
 interval(200)
     .pipe(take(5))
-    .subscribe(_ => console.log(_));
+    .subscribe(counter => console.log(counter));
 
 
 range(1, 5)
-    .subscribe(_ => console.log(_));
+    .subscribe(i => console.log(i));
 
 
 const subject = new Subject();
-subject.subscribe(_ => console.log(_));
+subject.subscribe(n => console.log(n));
 subject.next(1);
 subject.next(2);
 subject.complete();
@@ -101,22 +101,15 @@ subject.complete();
 
 // And what about Promises?
 
-fromPromise(Promise.resolve("abc")).subscribe(_ => console.log(_));
-of(1).toPromise().then(_ => console.log(_));
+fromPromise(Promise.resolve("abc"))
+    .subscribe(text => console.log(text));
+
+of(1).toPromise()
+    .then(n => console.log(n));
 
 
+// wer subcribed muss unsubscriben
 
-
-// How to describe when and what is happening?
-
-// We are using so called marble diagrams to describe the time sequence.
-
-/**
- * empty() => '|'
- * of(1) => '1|'
- * timer(10, 3) => '-0-1-2|'
- * throwError(e) => '#'
- */
 
 
 
