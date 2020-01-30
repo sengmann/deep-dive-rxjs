@@ -7,7 +7,7 @@
 
 
 
-import { Observable, of, Subject } from "rxjs";
+import { merge, Observable, of, Subject } from "rxjs";
 import { filter, map } from "rxjs/operators";
 import { marbles } from "rxjs-marbles/jest";
 
@@ -69,6 +69,16 @@ describe("Testing observables", () => {
     it("with marble diagrams", marbles(marbleContext => {
         const empty = marbleContext.cold("|");
         marbleContext.expect(empty).toBeObservable("|");
+    }));
+
+    it("with marble diagrams and merging two observables", marbles((m) => {
+        const a$ = m.cold("-a|");
+        const b$ = m.cold("1|");
+
+        const o$ = m.cold("1a|");
+
+        const result = merge(a$, b$);
+        m.expect(result).toBeObservable(o$);
     }));
 
     it("with filter, map and marble diagram", marbles((m) => {
