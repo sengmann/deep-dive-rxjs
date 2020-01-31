@@ -54,7 +54,7 @@
 
 
 // Hello from the observable world...
-import { empty, from, fromEvent, interval, of, range, Subject, timer } from "rxjs";
+import { empty, from, fromEvent, interval, Observable, of, range, Subject, timer } from "rxjs";
 import { take } from "rxjs/operators";
 import { fromPromise } from "rxjs/internal-compatibility";
 
@@ -108,7 +108,33 @@ of(1).toPromise()
     .then(n => console.log(n));
 
 
-// wer subcribed muss unsubscriben
+
+
+
+
+
+
+
+
+// Care must be taken to clean up the subscription
+
+const subject2 = new Subject<number>();
+
+class Foo {
+    lastNumber: number = -1;
+
+    constructor(private input$: Observable<number>) {
+        this.input$.subscribe(n => this.lastNumber = n);
+    }
+}
+
+let foo = new Foo(subject2); // create instance #1
+subject2.next(1);
+console.log(foo.lastNumber);
+foo = new Foo(subject2); // <- This leads to a memory leak where the memory of instance #1 cannot be released
+                         //    until subject2 sends the completed signal or ends with an error.
+
+
 
 
 

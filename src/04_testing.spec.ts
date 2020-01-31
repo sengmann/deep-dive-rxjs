@@ -81,6 +81,17 @@ describe("Testing observables", () => {
         m.expect(result).toBeObservable(o$);
     }));
 
+    it("with marble diagrams and merging two observables with grouping", marbles((m) => {
+        // grouping leads to time advancement, see https://github.com/ReactiveX/rxjs/blob/master/docs_app/content/guide/testing/marble-testing.md#marble-syntax
+        const a$ = m.cold("-a---|");
+        const b$ = m.cold("-1---|");
+
+        const o$ = m.cold("-(a1)|");
+
+        const result = merge(a$, b$);
+        m.expect(result).toBeObservable(o$);
+    }));
+
     it("with filter, map and marble diagram", marbles((m) => {
         const in1Marble = "-a-b-c|"; // strings
         const in2Marble = "-d-e-f|"; // mapped to number
