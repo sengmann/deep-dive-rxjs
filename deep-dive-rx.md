@@ -7,9 +7,9 @@
    * Wechsel zwischen Promise und Observable
    * Speicherlecks vermeiden
  * Operatoren
-   * einfache Operatoren wie filter, map, tap, catchError
-   * Higher Order Operators (combineLatest, zip, race)
-   * eigene Operatoren (skipNull, combineLatestToMap)
+   * einfache Operatoren
+   * Higher Order Operators
+   * eigene Operatoren
  * Cold vs. hot Observable
  * Testen
    * Observables / Subjects in Tests
