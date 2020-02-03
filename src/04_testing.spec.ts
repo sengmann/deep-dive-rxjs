@@ -11,17 +11,34 @@ import { merge, Observable, of, Subject } from "rxjs";
 import { filter, map } from "rxjs/operators";
 import { marbles } from "rxjs-marbles/jest";
 
+
+
+
+
+
+
+
+
 describe("Testing observables", () => {
+
     it("and check if last value is number 3", async () => {
         const foo$ = of(1, 2, 3);
         // check if last value is the number 3
         await foo$.toPromise().then(n => expect(n).toBe(3));
     });
 
+
+
+
+
     it("and check if every element is the char a", async () => {
         const testee$ = of("a", "a", "a");
         await testee$.forEach(char => expect(char).toBe("a"));
     });
+
+
+
+
 
     it("and use a subject to control value emitting in test", () => {
         // unit under test
@@ -71,6 +88,7 @@ describe("Testing observables", () => {
         marbleContext.expect(empty).toBeObservable("|");
     }));
 
+
     it("with marble diagrams and merging two observables", marbles((m) => {
         const a$ = m.cold("-a|");
         const b$ = m.cold("1|");
@@ -80,6 +98,7 @@ describe("Testing observables", () => {
         const result = merge(a$, b$);
         m.expect(result).toBeObservable(o$);
     }));
+
 
     it("with marble diagrams and merging two observables with grouping", marbles((m) => {
         // grouping leads to time advancement, see https://github.com/ReactiveX/rxjs/blob/master/docs_app/content/guide/testing/marble-testing.md#marble-syntax
@@ -91,6 +110,7 @@ describe("Testing observables", () => {
         const result = merge(a$, b$);
         m.expect(result).toBeObservable(o$);
     }));
+
 
     it("with filter, map and marble diagram", marbles((m) => {
         const in1Marble = "-a-b-c|"; // strings

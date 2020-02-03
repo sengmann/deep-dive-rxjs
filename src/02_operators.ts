@@ -30,6 +30,15 @@ import {
 } from "rxjs/operators";
 import { combineLatestToMap } from "@w11k/rx-ninja";
 
+
+
+
+
+
+
+
+
+
 of("1", "2", "3")
     .pipe(
         map(value => parseInt(value, 10)),
@@ -46,6 +55,15 @@ of("1", "2", "3")
         filter(n => n % 2 !== 0),
     ).subscribe(oddNumber => console.log(oddNumber));
 
+
+
+
+
+
+
+
+
+
 // RxViz https://rxviz.com/examples/custom
 /*
 const { interval } = Rx;
@@ -58,10 +76,19 @@ interval(500)
 */
 
 
+
+
+
+
+
+
+
+
 of(1, 2, 3, 4)
     .pipe(
         pairwise(),
     ).subscribe(pair => console.log(pair));
+
 
 // Only when value really changes
 of(1, 2, 2, 3, 4)
@@ -71,6 +98,11 @@ of(1, 2, 2, 3, 4)
         filter(([n1, n2]) => n1 === undefined || n1 !== n2),
         map(([, n2]) => n2)
     ).subscribe(n => console.log(n));
+
+
+
+
+
 
 
 
@@ -86,15 +118,22 @@ of(1, 2, 2, 3, 4)
 
 
 
+
+
+
+
+
 of(1, 2, 3, 4)
     .pipe(
         take(2)
     ).subscribe(n => console.log(n));
 
+
 of(1, 2, 3)
     .pipe(
         first()
     ).subscribe(n => console.log(n));
+
 
 empty().pipe(
     take(1), // okay
@@ -119,6 +158,7 @@ of(1, 2, 3, -1)
     error => console.log(`oh no ${error}`),
     () => console.log(`completed`) // not executed when error is thrown
 );
+
 
 throwError("bad things happen")
     .pipe(
@@ -155,7 +195,7 @@ const b = interval(2000).pipe(take(2));
 
 
 zip(a, b)
-    .subscribe(ziped => console.log(ziped));
+    .subscribe(zipped => console.log(zipped));
 
 
 
@@ -175,6 +215,8 @@ merge(
     interval(1600).pipe(map((_) => "b " + _))
 );
 */
+
+
 
 
 /* https://rxviz.com/examples/custom
