@@ -162,8 +162,8 @@ of(1, 2, 3, -1)
 
 throwError("bad things happen")
     .pipe(
-        catchError(error => of(1)) // recover
-    ).subscribe(_ => console.log(_));
+        catchError(_ => of(1)) // recover
+    ).subscribe(recoverValue => console.log(recoverValue));
 
 
 
@@ -276,25 +276,28 @@ canContainNull
 
 
 
+
+
+
+
+
 const oddNumbers = of(1, 3, 5);
 const evenNumbers = of(2, 4, 6);
 const randomNumber = of(6, 4, 2);
 
-//TODO Number example prüfen
 
-
-// What happens when we switch oddNumbers and evenNumbers?
 combineLatest([oddNumbers, evenNumbers, randomNumber])
     .pipe(
-        map(([o, e, r]) => o - e + (r * 10)),
+        // What happens when we switch oddNumbers and evenNumbers?
+        map(([oddNumbers, evenNumbers, randomNumber]) => oddNumbers - evenNumbers + (randomNumber * 10)),
     ).subscribe(_ => console.log(_));
 
 
 
 // Looks very similar, but we can access the values using the property name instead of the position in the array
-combineLatestToMap({ o: oddNumbers, r: randomNumber, e: evenNumbers})
+combineLatestToMap({ oddNumbers, evenNumbers, randomNumber })
     .pipe(
-        map(({e, o, r}) => o - e + (r * 10)),
+        map(({ oddNumbers, evenNumbers, randomNumber }) => oddNumbers - evenNumbers + (randomNumber * 10)),
     ).subscribe(_ => console.log(_));
 
 
