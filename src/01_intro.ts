@@ -58,15 +58,15 @@ import { empty, from, fromEvent, interval, Observable, of, range, Subject, timer
 import { take } from "rxjs/operators";
 import { fromPromise } from "rxjs/internal-compatibility";
 
-const EventEmitter = require("events").EventEmitter;
-const clickEventEmitter = new EventEmitter();
 
-of(1, 2, 3).subscribe(n => console.log(n));
+
 
 
 
 
 // Creating Observables
+
+of(1, 2, 3).subscribe(n => console.log(n));
 
 from([1, 2, 3]).subscribe(counter => console.log(counter));
 
@@ -75,12 +75,25 @@ timer(100).subscribe(_ => console.log(_));
 empty();
 
 
+
+
+
+
+
+
+
+
 // But why all of them have to end?
+
+const EventEmitter = require("events").EventEmitter;
+const clickEventEmitter = new EventEmitter();
 
 fromEvent(clickEventEmitter, "buttonClick")
     .pipe(take(1))
     .subscribe(mouseEvent => console.log(mouseEvent));
 clickEventEmitter.emit("buttonClick", { type: "MouseEvent", x: 100, y: 100 });
+
+
 
 // RxViz https://rxviz.com/
 interval(200)
@@ -88,8 +101,10 @@ interval(200)
     .subscribe(counter => console.log(counter));
 
 
+
 range(1, 5)
     .subscribe(i => console.log(i));
+
 
 
 const subject = new Subject();
@@ -97,6 +112,14 @@ subject.subscribe(n => console.log(n));
 subject.next(1);
 subject.next(2);
 subject.complete();
+
+
+
+
+
+
+
+
 
 
 // And what about Promises?
