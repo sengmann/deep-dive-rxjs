@@ -65,14 +65,20 @@ import { fromPromise } from "rxjs/internal-compatibility";
 
 
 // Creating Observables
+empty();
 
 of(1, 2, 3).subscribe(n => console.log(n));
 
+
 from([1, 2, 3]).subscribe(counter => console.log(counter));
+
+
+range(1, 5)
+    .subscribe(i => console.log(i));
+
 
 timer(100).subscribe(_ => console.log(_));
 
-empty();
 
 
 
@@ -102,8 +108,10 @@ interval(200)
 
 
 
-range(1, 5)
-    .subscribe(i => console.log(i));
+
+
+
+
 
 
 
